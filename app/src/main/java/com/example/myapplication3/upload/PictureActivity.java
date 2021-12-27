@@ -271,7 +271,8 @@ public class PictureActivity extends AppCompatActivity implements View.OnClickLi
                         //请求错误回调方法
                         @Override
                         public void onFailure(Call call, IOException e) {
-                            System.out.println("连接失败");
+                            e.printStackTrace();
+                            System.out.println("上传：连接服务器失败");
                         }
 
                         @Override

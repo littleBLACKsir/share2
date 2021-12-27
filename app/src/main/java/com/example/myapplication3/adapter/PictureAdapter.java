@@ -2,6 +2,7 @@ package com.example.myapplication3.adapter;
 
 import static android.content.Context.MODE_PRIVATE;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -25,12 +26,9 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.dueeeke.videocontroller.component.PrepareView;
-import com.example.myapplication3.HomeActivity;
 import com.example.myapplication3.LoginActivity;
 import com.example.myapplication3.R;
-import com.example.myapplication3.Utils.DonwloadSaveImg;
 import com.example.myapplication3.entity.DownloadResponse;
-import com.example.myapplication3.entity.LoginResponse;
 import com.example.myapplication3.entity.PictureEntity;
 import com.example.myapplication3.entity.ResultResponse;
 import com.google.gson.Gson;
@@ -41,8 +39,8 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.List;
 
@@ -268,7 +266,7 @@ public class PictureAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                             @Override
                             public void run() {
                                 mHandler.obtainMessage(SAVE_BEGIN).sendToTarget();
-                                Bitmap bp = returnBitMap(resultResponse.getData());
+                                Bitmap bp = returnBitmap(resultResponse.getData());
                                 saveImageToPhotos(mContext, bp);
                             }
                         }).start();
@@ -365,39 +363,54 @@ public class PictureAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         editor.clear();
         editor.commit();
     }
-    private void saveImageToPhotos(Context context, Bitmap bmp) {
+    private void saveImageToPhotos(Context context, Bitmap bitmap) {
         if (!Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
            ShowToast("保存失败,没有读写sd卡权限");
         }
         // 首先保存图片
-        File appDir = new File(Environment.getExternalStorageDirectory().getAbsolutePath(), "Boohee");
-        if (!appDir.exists()) {
-            appDir.mkdir();
-        }
+//        File appDir = new File(Environment.getExternalStorageDirectory().getAbsolutePath(), "Boohee");
+//        if (!appDir.exists()) {
+//            appDir.mkdir();
+//        }
         String fileName = System.currentTimeMillis() + ".jpg";
-        File file = new File(appDir, fileName);
+//        File file = new File(appDir, fileName);
+//        try {
+//            FileOutputStream fos = new FileOutputStream(file);
+//            bmp.compress(Bitmap.CompressFormat.JPEG, 100, fos);
+//            fos.flush();
+//            fos.close();
+//        } catch (FileNotFoundException e) {
+//            e.printStackTrace();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(MediaStore.Images.Media.DISPLAY_NAME, fileName);
+        contentValues.put(MediaStore.Images.Media.DESCRIPTION, fileName);
+        contentValues.put(MediaStore.Images.Media.MIME_TYPE, "image/jpg");
+        Uri uri = context.getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentValues);
+        OutputStream outputStream;
         try {
-            FileOutputStream fos = new FileOutputStream(file);
-            bmp.compress(Bitmap.CompressFormat.JPEG, 100, fos);
-            fos.flush();
-            fos.close();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        // 其次把文件插入到系统图库
-        try {
-            MediaStore.Images.Media.insertImage(context.getContentResolver(),
-                    file.getAbsolutePath(), fileName, null);
-        } catch (FileNotFoundException e) {
+            outputStream = context.getContentResolver().openOutputStream(uri);
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream);
+            outputStream.close();
+        } catch (Exception e) {
             e.printStackTrace();
             mHandler.obtainMessage(SAVE_FAILURE).sendToTarget();
             return;
         }
+
+        // 其次把文件插入到系统图库
+//        try {
+//            MediaStore.Images.Media.insertImage(context.getContentResolver(),
+//                    file.getAbsolutePath(), fileName, null);
+//        } catch (FileNotFoundException e) {
+//            e.printStackTrace();
+//
+//            return;
+//        }
         // 最后通知图库更新
-        context.sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.parse(file.getAbsolutePath())));
+        context.sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE));
         mHandler.obtainMessage(SAVE_SUCCESS).sendToTarget();
 
     }
@@ -408,20 +421,17 @@ public class PictureAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
      * @param url
      * @return bitmap type
      */
-    public final static Bitmap returnBitMap(String url) {
-        URL myFileUrl;
+    public static Bitmap returnBitmap(String url) {
         Bitmap bitmap = null;
         try {
-            myFileUrl = new URL(url);
+            URL myFileUrl = new URL(url);
             HttpURLConnection conn;
             conn = (HttpURLConnection) myFileUrl.openConnection();
             conn.setDoInput(true);
             conn.connect();
             InputStream is = conn.getInputStream();
             bitmap = BitmapFactory.decodeStream(is);
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return bitmap;

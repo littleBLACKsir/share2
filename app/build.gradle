@@ -57,5 +57,6 @@ dependencies {
     implementation 'com.github.dueeeke.dkplayer:videocache:3.2.6'
     implementation 'com.mylhyl:acp:1.2.0'
 
+    implementation 'de.hdodenhof:circleimageview:3.1.0'
 }
 

@@ -137,12 +137,11 @@ public class HomeFragment extends BaseFragment {
                                     newsAdapter.setDatas(datas);
                                     newsAdapter.notifyDataSetChanged();
 
+                                }
+                                if (isRefresh) {
+                                    ShowToast("暂时无数据");
                                 } else {
-                                    if (isRefresh) {
-                                        ShowToast("暂时无数据");
-                                    } else {
-                                        ShowToast("没有更多数据");
-                                    }
+                                    ShowToast("没有更多数据");
                                 }
                             }
                         }
