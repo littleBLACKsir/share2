@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="5dp"
+    android:background="@color/white">
+
+    <!--  拍照图标-->
+    <RelativeLayout
+        android:id="@+id/rl_photograph"
+        android:layout_width="90dp"
+        android:layout_height="90dp"
+        android:layout_alignParentLeft="true">
+
+        <ImageView
+            android:id="@+id/photograph"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/photograph"
+            android:contentDescription="@null"
+            android:scaleType="centerCrop" />
+    </RelativeLayout>
+
+    <!--  相册图标-->
+    <RelativeLayout
+        android:id="@+id/rl_album"
+        android:layout_width="90dp"
+        android:layout_height="90dp"
+        android:layout_alignParentRight="true">
+
+        <ImageView
+            android:id="@+id/album"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_marginTop="10dp"
+            android:contentDescription="@null"
+            android:scaleType="centerCrop"
+            android:background="@drawable/add_img"/>
+    </RelativeLayout>
+
+    <!--    分隔线-->
+    <RelativeLayout
+        android:id="@+id/rl_1"
+        android:layout_width="match_parent"
+        android:layout_height="10dp"
+        android:layout_below="@id/rl_album"
+        android:background="#F0F0F0"></RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/rl_EditTitle"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:layout_below="@id/rl_1"
+        android:gravity="center"
+        android:background="@color/white">
+
+        <EditText
+            android:id="@+id/EditTitle"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:background="@color/white"
+            android:hint="请输入标题"
+            android:textColor="@color/black"></EditText>
+
+    </RelativeLayout>
+
+    <!--    分隔线-->
+    <RelativeLayout
+        android:id="@+id/rl_2"
+        android:layout_width="match_parent"
+        android:layout_height="10dp"
+        android:layout_below="@id/rl_EditTitle"
+        android:background="#F0F0F0"></RelativeLayout>
+
+    <!--选择的图片-->
+    <RelativeLayout
+        android:id="@+id/pictuer"
+        android:layout_width="match_parent"
+        android:layout_height="450dp"
+        android:layout_below="@id/rl_2"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="#fff"
+            android:padding="1dp"
+            android:scaleType="fitXY" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@id/rl_upload"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/pictuer"
+        android:gravity="center">
+
+        <Button
+            android:id="@+id/bottom_upload"
+            android:layout_width="200dp"
+            android:layout_height="70dp"
+            android:text="上传"
+            android:textSize="50dp"
+            android:background="@color/teal_200"></Button>
+
+    </RelativeLayout>
+
+</RelativeLayout>
