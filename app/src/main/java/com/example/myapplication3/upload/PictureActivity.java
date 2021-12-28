@@ -107,9 +107,9 @@ public class PictureActivity extends AppCompatActivity implements View.OnClickLi
             checkPermission();
         }
 
-        photograph = findViewById(R.id.photograph);
+//        photograph = findViewById(R.id.photograph);
         album = findViewById(R.id.album);
-        photograph.setOnClickListener(this);
+//        photograph.setOnClickListener(this);
         album.setOnClickListener(this);
         Account=GetStringFromSP("username");
         button_upload=findViewById(R.id.bottom_upload);
@@ -190,47 +190,47 @@ public class PictureActivity extends AppCompatActivity implements View.OnClickLi
     public void onClick(View v) {
         switch (v.getId()) {
 
-            //拍照按钮事件
-            case R.id.photograph:
-                //方法一：这样拍照只能取到缩略图（不清晰）
-                intent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
-                startActivityForResult(intent, CAMERA);
-
-
-                //方法二：指定加载路径图片路径（保存原图，清晰）
-                String SD_PATH = Environment.getExternalStorageDirectory().getPath() + "/拍照上传示例/";
-                SimpleDateFormat format = new SimpleDateFormat("yyyyMMddHHmmss");
-                String fileName = format.format(new Date(System.currentTimeMillis())) + ".JPEG";
-                photoPath = SD_PATH + fileName;
-                File file = new File(photoPath);
-                if (!file.getParentFile().exists()) {
-                    file.getParentFile().mkdirs();
-                }
-
-                //兼容7.0以上的版本
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                    try {
-                        ContentValues values = new ContentValues(1);
-                        values.put(MediaStore.Images.Media.MIME_TYPE, "image/jpg");
-                        values.put(MediaStore.Images.Media.DATA, photoPath);
-                        Uri tempuri = getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
-                        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
-                        if (tempuri != null) {
-                            intent.putExtra(MediaStore.EXTRA_OUTPUT, tempuri);
-                            intent.putExtra(MediaStore.EXTRA_VIDEO_QUALITY, 1);
-                        }
-                        startActivityForResult(intent, CAMERA);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                } else {
-                    intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                    Uri uri = Uri.fromFile(file);
-                    intent.putExtra(MediaStore.EXTRA_OUTPUT, uri); //指定拍照后的存储路径，保存原图
-                    startActivityForResult(intent, CAMERA);
-                }
-                break;
+//            //拍照按钮事件
+//            case R.id.photograph:
+//                //方法一：这样拍照只能取到缩略图（不清晰）
+//                intent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+//                startActivityForResult(intent, CAMERA);
+//
+//
+//                //方法二：指定加载路径图片路径（保存原图，清晰）
+//                String SD_PATH = Environment.getExternalStorageDirectory().getPath() + "/拍照上传示例/";
+//                SimpleDateFormat format = new SimpleDateFormat("yyyyMMddHHmmss");
+//                String fileName = format.format(new Date(System.currentTimeMillis())) + ".JPEG";
+//                photoPath = SD_PATH + fileName;
+//                File file = new File(photoPath);
+//                if (!file.getParentFile().exists()) {
+//                    file.getParentFile().mkdirs();
+//                }
+//
+//                //兼容7.0以上的版本
+//                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+//                    try {
+//                        ContentValues values = new ContentValues(1);
+//                        values.put(MediaStore.Images.Media.MIME_TYPE, "image/jpg");
+//                        values.put(MediaStore.Images.Media.DATA, photoPath);
+//                        Uri tempuri = getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
+//                        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+//                        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+//                        if (tempuri != null) {
+//                            intent.putExtra(MediaStore.EXTRA_OUTPUT, tempuri);
+//                            intent.putExtra(MediaStore.EXTRA_VIDEO_QUALITY, 1);
+//                        }
+//                        startActivityForResult(intent, CAMERA);
+//                    } catch (Exception e) {
+//                        e.printStackTrace();
+//                    }
+//                } else {
+//                    intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+//                    Uri uri = Uri.fromFile(file);
+//                    intent.putExtra(MediaStore.EXTRA_OUTPUT, uri); //指定拍照后的存储路径，保存原图
+//                    startActivityForResult(intent, CAMERA);
+//                }
+//                break;
 
             //选择按钮事件
             case R.id.album:
@@ -252,7 +252,7 @@ public class PictureActivity extends AppCompatActivity implements View.OnClickLi
                     return;
                 }
                 photoPath = PathHelper.getRealPathFromUri(PictureActivity.this, uri);
-                file = new File(photoPath);
+                File file = new File(photoPath);
                 if (file.exists()) {
 
                     final RequestBody requestBody= RequestBody.create(MediaType.parse("image/jpg"),file);
@@ -286,16 +286,19 @@ public class PictureActivity extends AppCompatActivity implements View.OnClickLi
                                 System.out.println(loginResponse);
                                 if(loginResponse.getCode()==200)
                                 {
-                                    ShowToastAsyn("上传成功！");
-
+                                    runOnUiThread(() -> {
+                                        ShowToast("上传成功！");
+                                        finish();
+                                    });
                                 }
-                                else {
-                                    ShowToastAsyn("上传失败！code:"+loginResponse.getCode());
+                                else
+                                {
+                                    runOnUiThread(() -> ShowToast("上传失败！code:"+loginResponse.getCode()));
                                 }
                             }
                             else
                             {
-                                ShowToastAsyn("上传失败！");
+                                runOnUiThread(() -> ShowToast("上传失败！"));
                             }
                         }
                     });
@@ -521,12 +524,6 @@ public class PictureActivity extends AppCompatActivity implements View.OnClickLi
     {
         SharedPreferences sp= getSharedPreferences("sp_sjj", MODE_PRIVATE);
         return sp.getString(key,"");
-    }
-    public void ShowToastAsyn(String msg)
-    {
-        Looper.prepare();
-        Toast.makeText(mContext, msg, Toast.LENGTH_SHORT).show();
-        Looper.loop();
     }
     public void ShowToast(String msg)
     {

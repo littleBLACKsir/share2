@@ -69,8 +69,8 @@
                     <ImageView
                         android:id="@+id/img_cover"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:scaleType="center"
+                        android:layout_height="wrap_content"
+                        android:scaleType="fitXY"
                         android:src="@mipmap/default_bg" />
 
                 </RelativeLayout>
@@ -104,29 +104,29 @@
                     android:textSize="14sp" />
             </LinearLayout>
 
-            <!--收藏-->
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:layout_centerVertical="true"
-                android:orientation="horizontal">
+<!--            &lt;!&ndash;收藏&ndash;&gt;-->
+<!--            <LinearLayout-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_centerInParent="true"-->
+<!--                android:layout_centerVertical="true"-->
+<!--                android:orientation="horizontal">-->
 
-                <ImageView
-                    android:id="@+id/img_collect"
-                    android:layout_width="19dp"
-                    android:layout_height="19dp"
-                    android:src="@mipmap/collect" />
+<!--                <ImageView-->
+<!--                    android:id="@+id/img_collect"-->
+<!--                    android:layout_width="19dp"-->
+<!--                    android:layout_height="19dp"-->
+<!--                    android:src="@mipmap/collect" />-->
 
-                <TextView
-                    android:id="@+id/collect"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="3dp"
-                    android:text="0"
-                    android:textColor="#161616"
-                    android:textSize="14sp" />
-            </LinearLayout>
+<!--                <TextView-->
+<!--                    android:id="@+id/collect"-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_marginLeft="3dp"-->
+<!--                    android:text="0"-->
+<!--                    android:textColor="#161616"-->
+<!--                    android:textSize="14sp" />-->
+<!--            </LinearLayout>-->
 
             <!--点赞-->
             <LinearLayout

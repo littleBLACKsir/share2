@@ -71,14 +71,16 @@ public class PictureAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         }
     };
 
-    private SharedPreferences sp;
+    private SharedPreferences getLikeSp;
+    private SharedPreferences downLoadSp;
 
     public void setDatas(List<PictureEntity> datas) {
         this.datas = datas;
     }
     public PictureAdapter(Context context) {
         this.mContext = context;
-        sp = mContext.getSharedPreferences("getlike", MODE_PRIVATE);
+        getLikeSp = mContext.getSharedPreferences("getlike", MODE_PRIVATE);
+        downLoadSp = mContext.getSharedPreferences("download", MODE_PRIVATE);
     }
 
     @NonNull
@@ -150,7 +152,7 @@ public class PictureAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             tvTitle = view.findViewById(R.id.title);
             tvAuthor = view.findViewById(R.id.author);
             tvDianzan = view.findViewById(R.id.dianzan);
-            tvCollect = view.findViewById(R.id.collect);
+//            tvCollect = view.findViewById(R.id.collect);
             tvDownload = view.findViewById(R.id.download);
             img_header = view.findViewById(R.id.img_header);
             Cover = view.findViewById(R.id.img_cover);
@@ -160,8 +162,8 @@ public class PictureAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 @Override
                 public void onClick(View view) {
                     int dianzancount=Integer.parseInt(tvDianzan.getText().toString());
-                    int totalNum = sp.getInt("num", 0);
-                    SharedPreferences.Editor editor = sp.edit();
+                    int totalNum = getLikeSp.getInt("num", 0);
+                    SharedPreferences.Editor editor = getLikeSp.edit();
                     if(islikeflag)
                     {
                         SubDianzan(id,username,token);
@@ -183,6 +185,8 @@ public class PictureAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             image_Download.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    int downloadNum = Integer.parseInt(tvDownload.getText().toString());
+                    tvDownload.setText(String.valueOf(++downloadNum));
                     GetPictureUrl(id,username,token);
                 }
             });
@@ -233,6 +237,11 @@ public class PictureAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     }
     public void GetPictureUrl(int id,String username,String token)
     {
+        int totalNum = downLoadSp.getInt("num", 0);
+        SharedPreferences.Editor editor = downLoadSp.edit();
+        editor.putInt("num", ++totalNum);
+        editor.apply();
+
         OkHttpClient okHttpClient=new OkHttpClient.Builder().build();
         FormBody formBody = new FormBody.Builder()
                 .add("username", username)

@@ -11,6 +11,7 @@ import com.example.myapplication3.adapter.PictureAdapter;
 import com.example.myapplication3.entity.PictureEntity;
 import com.example.myapplication3.entity.ResultResponse;
 import com.google.gson.Gson;
+import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnLoadMoreListener;
 import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
@@ -29,7 +30,7 @@ import okhttp3.Response;
 
 public class HomeFragment extends BaseFragment {
     private RecyclerView recyclerView;
-    private RefreshLayout refreshLayout;
+    private SmartRefreshLayout refreshLayout;
     private PictureAdapter newsAdapter;
     private List<PictureEntity> datas = new ArrayList<>();
     private LinearLayoutManager linearLayoutManager;
@@ -70,6 +71,7 @@ public class HomeFragment extends BaseFragment {
         refreshLayout.setOnRefreshListener(new OnRefreshListener() {
             @Override
             public void onRefresh(RefreshLayout refreshlayout) {
+                refreshLayout.postDelayed(new FinishRunnable(), 5000);
                 pageNum = 1;
                 getNewsList(true);
             }
@@ -77,6 +79,7 @@ public class HomeFragment extends BaseFragment {
         refreshLayout.setOnLoadMoreListener(new OnLoadMoreListener() {
             @Override
             public void onLoadMore(RefreshLayout refreshlayout) {
+                refreshLayout.postDelayed(new FinishRunnable(), 5000);
                 pageNum++;
                 getNewsList(false);
             }
@@ -110,34 +113,34 @@ public class HomeFragment extends BaseFragment {
             public void onResponse(Call call, Response response) throws IOException {
 
                     String res= response.body().string();
-                    getActivity().runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            if (isRefresh) {
-                                refreshLayout.finishRefresh(true);
-                            } else {
-                                refreshLayout.finishLoadMore(true);
-                            }
-                            ResultResponse resresponse = new Gson().fromJson(res, ResultResponse.class);
-                            if(resresponse!=null&&resresponse.getCode()==401)
-                            {
-                                RemoveStringFromSP();
-                                navgateToWithFlag(LoginActivity.class,
-                                        Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-                            }
-                            System.out.println(resresponse);
-                            if (resresponse != null && resresponse.getCode() == 200) {
-                                List<PictureEntity> list = resresponse.getDatas();
-                                if (list != null && list.size() > 0) {
-                                    if (isRefresh) {
-                                        datas = list;
-                                    } else {
-                                        datas.addAll(list);
-                                    }
-                                    newsAdapter.setDatas(datas);
-                                    newsAdapter.notifyDataSetChanged();
-
+                    getActivity().runOnUiThread(() -> {
+                        if (isRefresh) {
+                            refreshLayout.finishRefresh();
+                        } else {
+                            refreshLayout.finishLoadMore();
+                        }
+                        ResultResponse resresponse = new Gson().fromJson(res, ResultResponse.class);
+                        if(resresponse!=null&&resresponse.getCode()==401)
+                        {
+                            RemoveStringFromSP();
+                            navgateToWithFlag(LoginActivity.class,
+                                    Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                        }
+                        System.out.println(resresponse);
+                        if (resresponse != null && resresponse.getCode() == 200) {
+                            List<PictureEntity> list = resresponse.getDatas();
+                            if (list != null && list.size() > 0) {
+                                if (isRefresh) {
+                                    datas = list;
+                                } else {
+                                    datas.addAll(list);
                                 }
+                                newsAdapter.setDatas(datas);
+                                newsAdapter.notifyDataSetChanged();
+
+                            }
+                            else
+                            {
                                 if (isRefresh) {
                                     ShowToast("暂时无数据");
                                 } else {
@@ -149,5 +152,17 @@ public class HomeFragment extends BaseFragment {
                 }
 
         });
+    }
+
+    class FinishRunnable implements Runnable
+    {
+        @Override
+        public void run() {
+            if (refreshLayout != null)
+            {
+                refreshLayout.finishRefresh();
+                refreshLayout.finishLoadMore();
+            }
+        }
     }
 }

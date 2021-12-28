@@ -33,8 +33,10 @@ public class MyFragment extends BaseFragment {
     private String username;
     private TextView text_username;
     private TextView tv_get_like_num;
-    private EditText text_signature;
-    private SharedPreferences sp;
+    private TextView text_signature;
+    private TextView tv_download_num;
+    private SharedPreferences getLikeSp;
+    private SharedPreferences downLoadSp;
 
     public static MyFragment newInstance() {
         return new MyFragment();
@@ -53,11 +55,14 @@ public class MyFragment extends BaseFragment {
         username=GetStringFromSP("username");
         tv_get_like_num=mRootView.findViewById(R.id.tv_get_like_num);
         text_signature=mRootView.findViewById(R.id.text_signature);
+        tv_download_num=mRootView.findViewById(R.id.tv_download_num);
     }
 
     @Override
     protected void initData() {
-        sp = getContext().getSharedPreferences("getlike", MODE_PRIVATE);
+        getLikeSp = getContext().getSharedPreferences("getlike", MODE_PRIVATE);
+        downLoadSp = getContext().getSharedPreferences("download", MODE_PRIVATE);
+
         upload.setOnClickListener(new View.OnClickListener() {
                                         @Override
                                         public void onClick(View view) {
@@ -74,24 +79,26 @@ public class MyFragment extends BaseFragment {
             }
         });
         text_username.setText(username);
-        text_signature.setOnKeyListener((view, keyCode, keyEvent) -> {
-            if(keyCode == KeyEvent.KEYCODE_ENTER){
-                /*隐藏软键盘*/
-                InputMethodManager inputMethodManager = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-                if(inputMethodManager.isActive()){
-                    inputMethodManager.hideSoftInputFromWindow(view.getApplicationWindowToken(), 0);
-                }
-                text_signature.clearFocus();
-                return true;
-            }
-            return false;
-        });
+//        text_signature.setOnKeyListener((view, keyCode, keyEvent) -> {
+//            if(keyCode == KeyEvent.KEYCODE_ENTER){
+//                /*隐藏软键盘*/
+//                InputMethodManager inputMethodManager = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+//                if(inputMethodManager.isActive()){
+//                    inputMethodManager.hideSoftInputFromWindow(view.getApplicationWindowToken(), 0);
+//                }
+//                text_signature.clearFocus();
+//                return true;
+//            }
+//            return false;
+//        });
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        int totalNum = sp.getInt("num", 0);
-        tv_get_like_num.setText(String.valueOf(totalNum));
+        int getLikeNum = getLikeSp.getInt("num", 0);
+        tv_get_like_num.setText(String.valueOf(getLikeNum));
+        int downloadNum = downLoadSp.getInt("num", 0);
+        tv_download_num.setText(String.valueOf(downloadNum));
     }
 }
