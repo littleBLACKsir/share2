@@ -6,23 +6,23 @@
     android:padding="5dp"
     android:background="@color/white">
 
-<!--    &lt;!&ndash;  拍照图标&ndash;&gt;-->
-<!--    <RelativeLayout-->
-<!--        android:id="@+id/rl_photograph"-->
-<!--        android:layout_width="90dp"-->
-<!--        android:layout_height="90dp"-->
-<!--        android:layout_alignParentLeft="true">-->
+    <!--  拍照图标-->
+    <RelativeLayout
+        android:id="@+id/rl_photograph"
+        android:layout_width="90dp"
+        android:layout_height="90dp"
+        android:layout_alignParentLeft="true">
 
-<!--        <ImageView-->
-<!--            android:id="@+id/photograph"-->
-<!--            android:layout_width="80dp"-->
-<!--            android:layout_height="80dp"-->
-<!--            android:layout_centerHorizontal="true"-->
-<!--            android:layout_marginTop="10dp"-->
-<!--            android:background="@drawable/camera"-->
-<!--            android:contentDescription="@null"-->
-<!--            android:scaleType="centerCrop" />-->
-<!--    </RelativeLayout>-->
+        <ImageView
+            android:id="@+id/photograph"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/camera"
+            android:contentDescription="@null"
+            android:scaleType="centerCrop" />
+    </RelativeLayout>
 
     <!--  相册图标-->
     <RelativeLayout

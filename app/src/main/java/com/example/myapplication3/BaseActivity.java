@@ -53,7 +53,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         SharedPreferences sp=getSharedPreferences("sp_sjj",MODE_PRIVATE);
         SharedPreferences.Editor editor=sp.edit();
         editor.putString(key,val);
-        editor.commit();
+        editor.apply();
     }
     protected String GetStringFromSP(String key)
     {

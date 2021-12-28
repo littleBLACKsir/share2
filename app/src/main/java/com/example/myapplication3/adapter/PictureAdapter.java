@@ -85,6 +85,7 @@ public class PictureAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
     @NonNull
     @Override
+    //创建item，展示图片
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(mContext).inflate(R.layout.item_picture, parent, false);
         PictureHolder viewHolder = new PictureHolder(view);
@@ -92,16 +93,18 @@ public class PictureAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     }
 
     @Override
-    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder,int position) {
+    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder,int position)
+    {
         PictureHolder vh = (PictureHolder) holder;
         PictureEntity PictureEntity = datas.get(position);
         System.out.println(PictureEntity);
         vh.tvTitle.setText(PictureEntity.getPicturename());
         vh.tvAuthor.setText(PictureEntity.getUsername());
         vh.tvDianzan.setText(String.valueOf(PictureEntity.getLiked()));
-        boolean islike=PictureEntity.isCollect();
+        boolean islike=PictureEntity.isCollect();   //从后端获取数据，是否点赞的状态
         System.out.println(String.valueOf(position)+islike+"");
-        if(islike)
+        //请求之后绑定的状态
+        if(islike)//设置点赞的效果
         {
             vh.image_Dianzan.setImageResource(R.mipmap.dianzan_select);
         }
@@ -117,13 +120,12 @@ public class PictureAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 .load(PictureEntity.getUrl())
                 .into(vh.Cover);
 
-
     }
 
     @Override
     public int getItemCount() {
         if (datas != null && datas.size() > 0) {
-            return datas.size();
+            return datas.size();   //返回item的值
         } else
             return 0;
 
@@ -164,6 +166,7 @@ public class PictureAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                     int dianzancount=Integer.parseInt(tvDianzan.getText().toString());
                     int totalNum = getLikeSp.getInt("num", 0);
                     SharedPreferences.Editor editor = getLikeSp.edit();
+                    //前端中点击按钮的状态绑定
                     if(islikeflag)
                     {
                         SubDianzan(id,username,token);
@@ -182,6 +185,7 @@ public class PictureAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                     editor.apply();
                 }
             });
+            //下载按钮
             image_Download.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -252,6 +256,7 @@ public class PictureAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 .url("http://123.56.83.121:8080/download")//请求的url
                 .post(formBody)
                 .build();
+        //请求服务器响应
         Call call = okHttpClient.newCall(request);
         //加入队列 异步操作
         call.enqueue(new Callback() {
@@ -267,7 +272,7 @@ public class PictureAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                     String res=response.body().string();
                     Gson gson=new Gson();
                     DownloadResponse resultResponse=gson.fromJson(res,DownloadResponse.class);
-                    if(resultResponse.getCode()==200)
+                    if(resultResponse.getCode()==200)  //拿到状态码
                     {
                         System.out.println("开始下载");
                         System.out.println(resultResponse.getData());
@@ -275,7 +280,7 @@ public class PictureAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                             @Override
                             public void run() {
                                 mHandler.obtainMessage(SAVE_BEGIN).sendToTarget();
-                                Bitmap bp = returnBitmap(resultResponse.getData());
+                                Bitmap bp = returnBitmap(resultResponse.getData());  //获取图片下载地址
                                 saveImageToPhotos(mContext, bp);
                             }
                         }).start();
@@ -425,7 +430,7 @@ public class PictureAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     }
 
     /**
-     * 将URL转化成bitmap形式
+     * 通过地址下载图片
      *
      * @param url
      * @return bitmap type

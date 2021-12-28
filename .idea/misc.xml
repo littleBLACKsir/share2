@@ -9,6 +9,7 @@
         <entry key="..\:/Users/10438/Desktop/Class_space/Android/V2/MyApplication3/app/src/main/res/drawable/icon_out.xml" value="0.23385416666666667" />
         <entry key="..\:/Users/10438/Desktop/Class_space/Android/V2/MyApplication3/app/src/main/res/drawable/icon_upload.xml" value="0.3885416666666667" />
         <entry key="..\:/Users/10438/Desktop/Class_space/Android/V2/MyApplication3/app/src/main/res/drawable/photo_album.xml" value="0.3885416666666667" />
+        <entry key="..\:/Users/10438/Desktop/Class_space/Android/V2/MyApplication3/app/src/main/res/drawable/shape_album.xml" value="0.26979166666666665" />
         <entry key="..\:/Users/10438/Desktop/Class_space/Android/V2/MyApplication3/app/src/main/res/drawable/shape_big_login_btn.xml" value="0.1361111111111111" />
         <entry key="..\:/Users/10438/Desktop/Class_space/Android/V2/MyApplication3/app/src/main/res/drawable/shape_big_register_btn.xml" value="0.1361111111111111" />
         <entry key="..\:/Users/10438/Desktop/Class_space/Android/V2/MyApplication3/app/src/main/res/drawable/shape_login_form.xml" value="0.26979166666666665" />
@@ -20,7 +21,7 @@
         <entry key="..\:/Users/10438/Desktop/Class_space/Android/V2/MyApplication3/app/src/main/res/layout/fragment_image.xml" value="0.12335359675785208" />
         <entry key="..\:/Users/10438/Desktop/Class_space/Android/V2/MyApplication3/app/src/main/res/layout/fragment_my.xml" value="0.5" />
         <entry key="..\:/Users/10438/Desktop/Class_space/Android/V2/MyApplication3/app/src/main/res/layout/item_picture.xml" value="0.2" />
-        <entry key="..\:/Users/10438/Desktop/Class_space/Android/V2/MyApplication3/app/src/main/res/layout/upload.xml" value="0.4" />
+        <entry key="..\:/Users/10438/Desktop/Class_space/Android/V2/MyApplication3/app/src/main/res/layout/upload.xml" value="0.22" />
       </map>
     </option>
   </component>
