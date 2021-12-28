@@ -2,6 +2,7 @@ package com.example.myapplication3;
 
 import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.ViewPager;
+import androidx.viewpager2.widget.ViewPager2;
 
 import com.example.myapplication3.adapter.MyPagerAdapter;
 import com.example.myapplication3.entity.TabEntity;
@@ -20,7 +21,7 @@ public class HomeActivity extends BaseActivity {
             R.mipmap.home_unselect, R.mipmap.my_unselect};
     private int[] mIconSelectIds = {
             R.mipmap.home_selected, R.mipmap.my_selected};
-    private ViewPager viewPager;
+    private ViewPager2 viewPager;
     private CommonTabLayout commonTabLayout;
     private ArrayList<Fragment> mFragments = new ArrayList<>();
     private ArrayList<CustomTabEntity> mTabEntities = new ArrayList<>();
@@ -53,22 +54,12 @@ public class HomeActivity extends BaseActivity {
             public void onTabReselect(int position) {
             }
         });
-        viewPager.setAdapter(new MyPagerAdapter(getSupportFragmentManager(), mTitles, mFragments));
+        viewPager.setAdapter(new MyPagerAdapter(this, mFragments));
         viewPager.setOffscreenPageLimit(mFragments.size());
-        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
-            }
-
+        viewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
             @Override
             public void onPageSelected(int position) {
                 commonTabLayout.setCurrentTab(position);
-            }
-
-            @Override
-            public void onPageScrollStateChanged(int state) {
-
             }
         });
     }

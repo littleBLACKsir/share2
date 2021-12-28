@@ -6,7 +6,7 @@ public class PictureEntity implements Serializable {
 
     private int pid;
     private String url;
-    private int dianzan;
+    private int liked;
     private String picturename;
     private String username;
     private boolean collect;
@@ -35,12 +35,12 @@ public class PictureEntity implements Serializable {
         this.url = url;
     }
 
-    public int getDianzan() {
-        return dianzan;
+    public int getLiked() {
+        return liked;
     }
 
-    public void setDianzan(int dianzan) {
-        this.dianzan = dianzan;
+    public void setLiked(int liked) {
+        this.liked = liked;
     }
 
     public String getPicturename() {
@@ -57,5 +57,15 @@ public class PictureEntity implements Serializable {
 
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    @Override
+    public String toString() {
+        return "PictureEntity{" +
+                "url='" + url + '\'' +
+                ", dianzan=" + liked +
+                ", picturename='" + picturename + '\'' +
+                ", collect=" + collect +
+                '}';
     }
 }

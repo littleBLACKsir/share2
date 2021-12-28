@@ -58,20 +58,23 @@
                         android:textColor="@color/skin_text_white"
                         android:textSize="16sp" />
 
-                    <TextView
+                    <EditText
+                        android:id="@+id/text_signature"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="4dp"
-                        android:text="这个人很懒，什么也没留下"
+                        android:hint="@string/persont_signature"
                         android:textColor="@color/skin_text_white"
-                        android:textSize="12sp" />
+                        android:textColorHint="#bcbcbc"
+                        android:textSize="12sp"
+                        android:singleLine="true"
+                        android:imeOptions="actionDone"/>
                 </LinearLayout>
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="62dp"
-                android:gravity="center"
                 android:orientation="horizontal">
 
                 <LinearLayout
@@ -80,16 +83,8 @@
                     android:gravity="center"
                     android:orientation="vertical">
 
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="95dp"
-                    android:layout_height="match_parent"
-                    android:gravity="center"
-                    android:orientation="vertical">
-
                     <TextView
+                        android:id="@+id/tv_get_like_num"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="0"
@@ -122,15 +117,6 @@
                         android:text="评论"
                         android:textColor="@color/skin_text_white" />
                 </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="95dp"
-                    android:layout_height="match_parent"
-                    android:gravity="center"
-                    android:orientation="vertical">
-
-
-                </LinearLayout>
             </LinearLayout>
         </LinearLayout>
 
@@ -151,7 +137,7 @@
                     android:layout_width="28dp"
                     android:layout_height="28dp"
                     android:layout_centerVertical="true"
-                    android:src="@mipmap/icon_collect" />
+                    android:src="@drawable/icon_collect" />
 
                 <TextView
                     android:layout_width="wrap_content"

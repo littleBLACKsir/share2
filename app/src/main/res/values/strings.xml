@@ -3,6 +3,7 @@
     <string name="login">登录</string>
     <string name="register">注册</string>
     <string name="account_hint">请输入用户名</string>
+    <string name="persont_signature">点击编辑个性签名</string>
     <string name="psw_hint">请输入密码</string>
     <string name="psw_hint2">请确认密码</string>
     <!-- TODO: Remove or change this placeholder text -->

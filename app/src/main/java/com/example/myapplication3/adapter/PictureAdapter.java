@@ -34,9 +34,6 @@ import com.example.myapplication3.entity.ResultResponse;
 import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -74,16 +71,14 @@ public class PictureAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         }
     };
 
+    private SharedPreferences sp;
+
     public void setDatas(List<PictureEntity> datas) {
         this.datas = datas;
     }
     public PictureAdapter(Context context) {
         this.mContext = context;
-
-    }
-    public PictureAdapter(Context context, List<PictureEntity> datas) {
-        this.datas = datas;
-        this.mContext = context;
+        sp = mContext.getSharedPreferences("getlike", MODE_PRIVATE);
     }
 
     @NonNull
@@ -101,7 +96,7 @@ public class PictureAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         System.out.println(PictureEntity);
         vh.tvTitle.setText(PictureEntity.getPicturename());
         vh.tvAuthor.setText(PictureEntity.getUsername());
-        vh.tvDianzan.setText(String.valueOf(PictureEntity.getDianzan()));
+        vh.tvDianzan.setText(String.valueOf(PictureEntity.getLiked()));
         boolean islike=PictureEntity.isCollect();
         System.out.println(String.valueOf(position)+islike+"");
         if(islike)
@@ -165,19 +160,24 @@ public class PictureAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 @Override
                 public void onClick(View view) {
                     int dianzancount=Integer.parseInt(tvDianzan.getText().toString());
+                    int totalNum = sp.getInt("num", 0);
+                    SharedPreferences.Editor editor = sp.edit();
                     if(islikeflag)
                     {
                         SubDianzan(id,username,token);
                         image_Dianzan.setImageResource(R.mipmap.dianzan);
                         tvDianzan.setText(String.valueOf(--dianzancount));
+                        editor.putInt("num", --totalNum);
                     }
                     else
                     {
                         AddDianzan(id,username,token);
                         image_Dianzan.setImageResource(R.mipmap.dianzan_select);
                         tvDianzan.setText(String.valueOf(++dianzancount));
+                        editor.putInt("num", ++totalNum);
                     }
                     islikeflag=!islikeflag;
+                    editor.apply();
                 }
             });
             image_Download.setOnClickListener(new View.OnClickListener() {
