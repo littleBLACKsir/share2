@@ -9,8 +9,8 @@ public class LoginResponse {
      */
 
     private String state;
-    private int code;
-    private String token;
+    private int code;   //状态码
+    private String token;       //鉴权
 
     public String getState() {
         return state;

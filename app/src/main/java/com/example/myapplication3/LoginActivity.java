@@ -63,21 +63,25 @@ public class LoginActivity extends BaseActivity {
             ShowToast("请输入密码！");
             return;
         }
+        //创建OKhttp的客户端，通过builder创建
         OkHttpClient okHttpClient=new OkHttpClient.Builder().build();
         HashMap m=new HashMap<String,Object>();
         m.put("username",Account);
         m.put("password",psw);
+        //构建body
         FormBody formBody = new FormBody.Builder()
                 .add("username", Account)
                 .add("password", psw)
                 .build();
+        //封装
         final Request request = new Request.Builder()
                 .url("http://123.56.83.121:8080/login")//请求的url
                 .post(formBody)
                 .build();
+        //发送
         Call call = okHttpClient.newCall(request);
         //加入队列 异步操作
-        call.enqueue(new Callback() {
+        call.enqueue(new Callback() {    //服务器返回结果
             //请求错误回调方法
             @Override
             public void onFailure(Call call, IOException e) {
@@ -86,18 +90,19 @@ public class LoginActivity extends BaseActivity {
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
-                if(response.code()==200) {
+                if(response.code()==200) {   //返回状态码正确才有效
                     String res=response.body().string();
                     Gson gson=new Gson();
-                    LoginResponse loginResponse=gson.fromJson(res,LoginResponse.class);
+                    LoginResponse loginResponse=gson.fromJson(res,LoginResponse.class);//解析json
                     System.out.println(loginResponse);
                     if(loginResponse.getCode()==200)
                     {
                         String token=loginResponse.getToken();
                         SaveToSP("token",token);
                         SaveToSP("username",Account);
-                        navgateToWithFlag(HomeActivity.class, Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
+                        navgateTo(HomeActivity.class);
                         ShowToastAsyn("登陆成功！");
+                        finish();
                     }
                     else
                     {
@@ -107,30 +112,5 @@ public class LoginActivity extends BaseActivity {
                 }
             }
         });
-
-//        Api.config(ApiConfig.LOGIN,m).postRequest(new SjjCallBack() {
-//            @Override
-//            public void OnSuccess(String res) {
-//                ShowToastAsyn(m.toString());
-//                Gson gson=new Gson();
-//                LoginResponse loginResponse=gson.fromJson(res,LoginResponse.class);
-//                if(loginResponse.getCode()==200)
-//                {
-//                    String token=loginResponse.getToken();
-//                    SaveToSP("token",token);
-//                    navgateToWithFlag(HomeActivity.class, Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
-//                    ShowToastAsyn("登陆成功！");
-//                }
-//                else
-//                {
-//                    ShowToastAsyn("登陆失败！");
-//                }
-//            }
-//
-//            @Override
-//            public void OnFailure(Exception e) {
-//
-//            }
-//        });
     }
 }
