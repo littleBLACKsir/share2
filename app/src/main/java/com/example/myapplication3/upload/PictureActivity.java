@@ -32,6 +32,7 @@ import androidx.core.content.ContextCompat;
 
 import com.example.myapplication3.HomeActivity;
 import com.example.myapplication3.LoginActivity;
+import com.example.myapplication3.MainActivity;
 import com.example.myapplication3.R;
 import com.example.myapplication3.Utils.StringUtils;
 import com.example.myapplication3.entity.LoginResponse;
@@ -44,6 +45,7 @@ import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
@@ -191,8 +193,8 @@ public class PictureActivity extends AppCompatActivity implements View.OnClickLi
             //拍照按钮事件
             case R.id.photograph:
                 //方法一：这样拍照只能取到缩略图（不清晰）
-                //intent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
-                //startActivityForResult(intent, CAMERA);
+                intent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+                startActivityForResult(intent, CAMERA);
 
 
                 //方法二：指定加载路径图片路径（保存原图，清晰）
@@ -312,44 +314,44 @@ public class PictureActivity extends AppCompatActivity implements View.OnClickLi
             case CAMERA:
                 if (resultCode == RESULT_OK) {
                     //对应方法一：图片未保存，需保存文件到本地
-//                    Bundle bundle = data.getExtras();
-//                    Bitmap bitmap = (Bitmap) bundle.get("data");
-//                    String savePath;
-//                    String SD_PATH = Environment.getExternalStorageDirectory().getPath() + "/拍照上传示例/";
-//                    SimpleDateFormat format = new SimpleDateFormat("yyyyMMddHHmmss");
-//                    String fileName = format.format(new Date(System.currentTimeMillis())) + ".JPEG";
-//                    if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
-//                        savePath = SD_PATH;
-//                    } else {
-//                        Toast.makeText(MainActivity.this, "保存失败！", Toast.LENGTH_SHORT).show();
-//                        return;
-//                    }
-//                    photoPath = savePath + fileName;
-//                    File file = new File(photoPath);
-//                    try {
-//                        if (!file.exists()) {
-//                            file.getParentFile().mkdirs();
-//                            file.createNewFile();
-//                        }
-//                        FileOutputStream stream = new FileOutputStream(file);
-//                        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
-//                        Toast.makeText(MainActivity.this, "保存成功,位置:" + file.getAbsolutePath(), Toast.LENGTH_SHORT).show();
-//                    } catch (IOException e) {
-//                        e.printStackTrace();
-//                    }
+                    Bundle bundle = data.getExtras();
+                    Bitmap bitmap = (Bitmap) bundle.get("data");
+                    String savePath;
+                    String SD_PATH = Environment.getExternalStorageDirectory().getPath() + "/拍照上传示例/";
+                    SimpleDateFormat format = new SimpleDateFormat("yyyyMMddHHmmss");
+                    String fileName = format.format(new Date(System.currentTimeMillis())) + ".JPEG";
+                    if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
+                        savePath = SD_PATH;
+                    } else {
+                        Toast.makeText(PictureActivity.this, "保存失败！", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                    photoPath = savePath + fileName;
+                    File file = new File(photoPath);
+                    try {
+                        if (!file.exists()) {
+                            file.getParentFile().mkdirs();
+                            file.createNewFile();
+                        }
+                        FileOutputStream stream = new FileOutputStream(file);
+                        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
+                        Toast.makeText(PictureActivity.this, "保存成功,位置:" + file.getAbsolutePath(), Toast.LENGTH_SHORT).show();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
 
                     //对应方法二：图片已保存，只需读取就行了
                     try {
                         FileInputStream stream = new FileInputStream(photoPath);
-                        Bitmap bitmap = BitmapFactory.decodeStream(stream);
+                        Bitmap bitmaps = BitmapFactory.decodeStream(stream);
 
                         //预览图片
                         ImageView image = findViewById(R.id.imageView);
-                        image.setImageBitmap(bitmap);
+                        image.setImageBitmap(bitmaps);
 
                         //上传图片（Android 4.0 之后不能在主线程中请求HTTP请求）
-                        File file = new File(photoPath);
-                        if (file.exists()) {
+                        File files = new File(photoPath);
+                        if (files.exists()) {
                             new Thread(new Runnable() {
                                 @Override
                                 public void run() {
@@ -359,9 +361,9 @@ public class PictureActivity extends AppCompatActivity implements View.OnClickLi
                                     form.put("password", "123456");
 
                                     //图片字段
-                                    HashMap<String, String> file = new HashMap<String, String>();
-                                    file.put(PathHelper.getFileNameFromPath(photoPath), photoPath);
-                                    formUpload(postUrl, form, file);
+                                    HashMap<String, String> files = new HashMap<String, String>();
+                                    files.put(PathHelper.getFileNameFromPath(photoPath), photoPath);
+                                    formUpload(postUrl, form, files);
                                 }
                             }).start();
                         }
@@ -373,12 +375,17 @@ public class PictureActivity extends AppCompatActivity implements View.OnClickLi
             // 选择图片库的图片
             case CHOOSE:
                 if (resultCode == RESULT_OK) {
-                    try {
+
                         uri = data.getData();
                         photoPath = PathHelper.getRealPathFromUri(PictureActivity.this, uri);
-                        Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), uri);
+                    Bitmap bitmap = null;
+                    try {
+                        bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), uri);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
 
-                        //压缩图片
+                    //压缩图片
                         bitmap = scaleBitmap(bitmap, (float) 0.5);
 
                         //预览图片
@@ -387,56 +394,8 @@ public class PictureActivity extends AppCompatActivity implements View.OnClickLi
                         button_upload.setEnabled(true);
 
                         //上传图片（Android 4.0 之后不能在主线程中请求HTTP请求）
-//                        File file = new File(photoPath);
-//                        if (file.exists()) {
-//                            String name=pic_name.getText().toString();
-//                            final RequestBody requestBody= RequestBody.create(MediaType.parse("image/jpg"),file);
-//                            final MultipartBody multipartBody=new MultipartBody.Builder()
-//                                    .setType(MultipartBody.FORM)
-//                                    .addFormDataPart("uploadFile",file.getName(),requestBody)
-//                                    .addFormDataPart("username",Account)
-//                                    .addFormDataPart("picturename",name)
-//                                    .build();
-//                            OkHttpClient okHttpClient=new OkHttpClient.Builder().build();
-//                            final Request request = new Request.Builder()
-//                                    .url("http://119.29.120.150:6183/upload")//请求的url
-//                                    .post(multipartBody)
-//                                    .build();
-//                            Call call = okHttpClient.newCall(request);
-//                            //加入队列 异步操作
-//                            call.enqueue(new Callback() {
-//                                //请求错误回调方法
-//                                @Override
-//                                public void onFailure(Call call, IOException e) {
-//                                    System.out.println("连接失败");
-//                                }
-//
-//                                @Override
-//                                public void onResponse(Call call, Response response) throws IOException {
-//                                    if(response.code()==200) {
-//                                        String res=response.body().string();
-//                                        Gson gson=new Gson();
-//                                        LoginResponse loginResponse=gson.fromJson(res,LoginResponse.class);
-//                                        System.out.println(loginResponse);
-//                                        if(loginResponse.getCode()==200)
-//                                        {
-//                                           ShowToastAsyn("上传成功！");
-//                                        }
-//                                        else {
-//                                            ShowToastAsyn("上传失败！code:"+loginResponse.getCode());
-//                                        }
-//                                    }
-//                                    else
-//                                    {
-//                                        ShowToastAsyn("上传失败！");
-//                                    }
-//                                }
-//                            });
-//                        }
+                        File file = new File(photoPath);
 
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
                 }
                 break;
         }
