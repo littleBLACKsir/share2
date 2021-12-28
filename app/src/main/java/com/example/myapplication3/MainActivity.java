@@ -136,9 +136,16 @@ public class MainActivity extends BaseActivity {
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                navgateTo(LoginActivity.class);
-                finish();
+                if(!StringUtils.IsEmpty(token)) {
+                    navgateTo(HomeActivity.class);
+                    finish();
+                }
+                else {
+                    navgateTo(LoginActivity.class);
+                    finish();
+                }
             }
+
         }, time);
 
 
