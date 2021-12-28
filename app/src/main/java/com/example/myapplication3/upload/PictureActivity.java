@@ -385,7 +385,7 @@ public class PictureActivity extends AppCompatActivity implements View.OnClickLi
                         e.printStackTrace();
                     }
 
-                    //压缩图片
+                        //压缩图片
                         bitmap = scaleBitmap(bitmap, (float) 0.5);
 
                         //预览图片

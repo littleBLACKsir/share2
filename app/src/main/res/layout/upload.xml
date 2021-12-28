@@ -17,8 +17,9 @@
             android:id="@+id/photograph"
             android:layout_width="80dp"
             android:layout_height="80dp"
+            android:layout_centerHorizontal="true"
             android:layout_marginTop="10dp"
-            android:background="@drawable/photograph"
+            android:background="@drawable/camera"
             android:contentDescription="@null"
             android:scaleType="centerCrop" />
     </RelativeLayout>
@@ -32,21 +33,22 @@
 
         <ImageView
             android:id="@+id/album"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
-            android:layout_marginTop="10dp"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="18dp"
+            android:background="@drawable/photo_album"
             android:contentDescription="@null"
-            android:scaleType="centerCrop"
-            android:background="@drawable/add_img"/>
+            android:scaleType="centerCrop" />
     </RelativeLayout>
 
     <!--    分隔线-->
     <RelativeLayout
         android:id="@+id/rl_1"
         android:layout_width="match_parent"
-        android:layout_height="10dp"
+        android:layout_height="3dp"
         android:layout_below="@id/rl_album"
-        android:background="#F0F0F0"></RelativeLayout>
+        android:background="#F3797D"></RelativeLayout>
 
     <RelativeLayout
         android:id="@+id/rl_EditTitle"
@@ -58,10 +60,10 @@
 
         <EditText
             android:id="@+id/EditTitle"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:background="@color/white"
-            android:hint="请输入标题"
+            android:layout_width="397dp"
+            android:layout_height="54dp"
+            android:hint="请输入图片标题"
+            android:textColorHint="#bcbcbc"
             android:textColor="@color/black"></EditText>
 
     </RelativeLayout>
@@ -70,9 +72,9 @@
     <RelativeLayout
         android:id="@+id/rl_2"
         android:layout_width="match_parent"
-        android:layout_height="10dp"
+        android:layout_height="3dp"
         android:layout_below="@id/rl_EditTitle"
-        android:background="#F0F0F0"></RelativeLayout>
+        android:background="#F3797D"></RelativeLayout>
 
     <!--选择的图片-->
     <RelativeLayout
@@ -104,7 +106,7 @@
             android:id="@+id/bottom_upload"
             android:layout_width="200dp"
             android:layout_height="70dp"
-            android:background="@color/teal_200"
+            android:background="#3A5CAC"
             android:text="上传"
             android:textSize="50dp"></Button>
 
